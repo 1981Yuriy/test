@@ -578,7 +578,6 @@
             
             <div id="sim3-feedback" class="feedback"></div>
 
-            <!-- Додаткова гарантована кнопка переходу -->
             <div id="stage3-next-container" style="margin-top:20px; text-align:right;">
                 <button class="btn" id="btn-next-3" onclick="advanceStage()">Перейти до Етапу 4 ➔</button>
             </div>
@@ -671,11 +670,33 @@
     <div id="cert-screen">
         <div class="cert-border">
             <h1 style="color:var(--neon-green);">🎓 СЕРТИФІКАТ ЕКСПЕРТА БД</h1>
-            <p style="font-size: 1.2rem; margin: 15px 0;">Вітаємо! Учень/учениця успішно пройшов(ла) практичний квест з опису, проєктування, сортування та створення запитів у СКБД <strong>LibreOffice Base</strong>!</p>
+            <p style="font-size: 1.2rem; margin: 15px 0;">Вітаємо! Ви успішно пройшли практичний квест з опису, проєктування, сортування та створення запитів у СКБД <strong>LibreOffice Base</strong>!</p>
             <div style="font-family:var(--font-code); color:var(--neon-blue); font-size:1.1rem; margin-bottom:20px;">
                 Дані Ліцею №45 успішно систематизовано!
             </div>
-            <button class="btn" onclick="resetProgress()">Пройти квест знову 🔄</button>
+
+            <!-- Форма для надсилання результатів викладачу через нове посилання Formspree -->
+            <form action="https://formspree.io/f/xdegkgqr" method="POST" style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; border: 1px solid var(--panel-border); max-width: 500px; margin: 0 auto 20px auto; text-align: left;">
+                <h3 style="color: var(--neon-blue); margin-bottom: 12px; font-size: 1.1rem; text-align: center;">📨 Надіслати результат викладачу</h3>
+                
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 0.9rem; margin-bottom: 5px;">Ваше Прізвище та Ім'я:</label>
+                    <input type="text" name="Прізвище_Ім'я" required placeholder="Наприклад: Іван Петренко" style="width: 100%;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-size: 0.9rem; margin-bottom: 5px;">Ваш клас:</label>
+                    <input type="text" name="Клас" required placeholder="Наприклад: 9-А" style="width: 100%;">
+                </div>
+
+                <!-- Приховані поля з додатковою інформацією -->
+                <input type="hidden" name="Статус" value="Квест успішно пройдено">
+                <input type="hidden" id="completion-time" name="Час_проходження">
+
+                <button type="submit" class="btn" style="width: 100%; justify-content: center;">Надіслати результат на пошту 🚀</button>
+            </form>
+
+            <button class="btn-reset" onclick="resetProgress()">Пройти квест знову 🔄</button>
         </div>
     </div>
 
@@ -753,6 +774,8 @@
             if (currentStage > 4) {
                 document.querySelectorAll('.stage-card').forEach(el => el.classList.remove('active'));
                 document.getElementById('cert-screen').classList.add('active');
+                // Фіксуємо точний час проходження для звіту на пошту
+                document.getElementById('completion-time').value = new Date().toLocaleString('uk-UA');
                 triggerConfetti();
             }
         }
